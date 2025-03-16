@@ -1,10 +1,9 @@
  package ru.nastya.phonebook.model;
  
+ import jakarta.persistence.*;
  import lombok.Data;
  import lombok.NoArgsConstructor;
 
- import javax.persistence.*;
- 
  @Entity
  @Table(name = "contact")
  @Data

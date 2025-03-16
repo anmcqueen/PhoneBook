@@ -6,4 +6,5 @@ import ru.nastya.phonebook.model.Contact;
 
 public interface ContactRepository extends JpaRepository<Contact, Long> {
   Optional<Contact> findByName(String name);
+  Optional<Contact> findByIdAndName(Long id, String name);
 }
