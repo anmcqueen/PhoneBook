@@ -1,5 +1,7 @@
  package ru.nastya.phonebook.service;
 
+ import io.micrometer.core.instrument.Counter;
+ import io.micrometer.core.instrument.MeterRegistry;
  import lombok.extern.slf4j.Slf4j;
  import org.springframework.stereotype.Service;
  import ru.nastya.phonebook.exception.ContactNotFoundException;
@@ -12,15 +14,23 @@
  @Slf4j
  public class ContactServiceImpl implements ContactService {
    private final ContactRepository contactRepository;
-   
-   public ContactServiceImpl(ContactRepository contactRepository) {
+   private final Counter contactCounter;
+
+   public ContactServiceImpl(ContactRepository contactRepository, MeterRegistry meterRegistry) {
      this.contactRepository = contactRepository;
+
+     // Инициализация счётчика
+     this.contactCounter = Counter.builder("contact.counter")
+           .description("Количество сохранений контактов")
+           .tag("service", "contact")
+           .register(meterRegistry);
    }
 
    @Override
    public void createContact(Contact contact) {
      log.info("Попытка сохранения контакта: {}", contact);
      contactRepository.save(contact);
+     contactCounter.increment();
      log.info("Контакт \"{}\" был сохранен в таблицу contact", contact);
    }
 
