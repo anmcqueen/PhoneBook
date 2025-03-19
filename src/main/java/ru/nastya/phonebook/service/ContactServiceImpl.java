@@ -78,6 +78,7 @@
            log.info("Контакт успешно удалён: {}", contact.get());
        } else {
            log.warn("Контакт для удаления не найден: {}", name);
+           throw new ContactNotFoundException("Contact is not found: " + name);
        }
    }
  }
